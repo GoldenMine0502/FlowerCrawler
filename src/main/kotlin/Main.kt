@@ -6,6 +6,7 @@ import java.lang.Thread.sleep
 import java.net.URL
 import javax.imageio.ImageIO
 import javax.xml.bind.DatatypeConverter
+import kotlin.math.roundToInt
 
 
 fun main() {
@@ -14,8 +15,9 @@ fun main() {
     val list = getFlowers()
 
     println(list)
+    println(list.size)
 
-    downloadImages(list)
+    downloadImages("images", list)
 }
 
 fun getFlowers(): List<String> {
@@ -31,16 +33,28 @@ fun getFlowers(): List<String> {
     }
 }
 
-fun downloadImages(flowers: List<String>) {
+fun downloadImages(folder: String, flowers: List<String>) {
     val driver = ChromeDriver()
 
-    val searchImgPer = 10
+    val searchImgPer = 30
+    val start = System.currentTimeMillis()
+    var completed = 0
 
     flowers.forEach { keyword ->
-        driver.get(getGoogleImageSearchLink("$keyword 사진"))
-        sleep(500L)
+        val current = System.currentTimeMillis()
 
-        val folder = File("images/$keyword")
+        if(completed > 0) {
+            val averageTime = (current - start) / completed
+            val remaining = flowers.size - completed
+
+            println("completed: ($completed/${flowers.size}) (${(completed.toDouble() / flowers.size * 100).roundToInt() }%) remaining time: ${(averageTime * remaining / 1000.0 / 60.0).roundToInt()} min.")
+        }
+
+
+        driver.get(getGoogleImageSearchLink("$keyword 사진"))
+        sleep(100L)
+
+        val folder = File("$folder/$keyword")
         folder.mkdirs()
 
         // 이미지 목록 div, img 목록
@@ -55,7 +69,7 @@ fun downloadImages(flowers: List<String>) {
 
             if (!file.exists()) file.createNewFile();
 
-            println("data: $data")
+//            println("data: $data")
 
             if (data != null) {
                 val split = data.split(",")
@@ -71,7 +85,7 @@ fun downloadImages(flowers: List<String>) {
 
                     img.flush()
                 } else {
-                    println("downloading image.. $data")
+//                    println("downloading image.. $data")
                     // 이미지 다운로드
                     BufferedInputStream(URL(data).openStream()).use { input ->
                         BufferedOutputStream(FileOutputStream(file)).use { output ->
@@ -87,7 +101,8 @@ fun downloadImages(flowers: List<String>) {
 
         }
 
-        sleep(500L)
+        sleep(100L)
+        completed++
     }
 
     driver.quit()
