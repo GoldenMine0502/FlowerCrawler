@@ -50,7 +50,6 @@ fun downloadImages(folder: String, flowers: List<String>) {
             println("completed: ($completed/${flowers.size}) (${(completed.toDouble() / flowers.size * 100).roundToInt() }%) remaining time: ${(averageTime * remaining / 1000.0 / 60.0).roundToInt()} min.")
         }
 
-
         driver.get(getGoogleImageSearchLink("$keyword 사진"))
         sleep(100L)
 
