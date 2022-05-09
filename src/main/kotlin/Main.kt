@@ -11,7 +11,15 @@ import javax.xml.bind.DatatypeConverter
 fun main() {
     setChromePath("lib/chromedriver.exe")
 
-    val list = FileInputStream("flower.xls").use { input ->
+    val list = getFlowers()
+
+    println(list)
+
+    downloadImages(list)
+}
+
+fun getFlowers(): List<String> {
+    return FileInputStream("flower.xls").use { input ->
         val wb = HSSFWorkbook(input)
 
         val sheet = wb.getSheetAt(0)
@@ -21,10 +29,6 @@ fun main() {
 
         sheet.asSequence().drop(1).mapNotNull { it.getCell(20)?.stringCellValue }.distinct().toList()
     }
-
-    println(list)
-
-    downloadImages(list)
 }
 
 fun downloadImages(flowers: List<String>) {
