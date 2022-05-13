@@ -34,6 +34,10 @@ fun getFlowers2(): List<String> {
             .filter { it.isNotEmpty() }
             .map { it.substring(0, it.length - 1) }
             .distinct()
+            .filter {
+                val file = File("images/$it")
+
+                !file.exists() || file.listFiles() == null || (file.listFiles() != null && file.listFiles().size < 30)}
             .toList()
     }
 }

@@ -29,11 +29,15 @@ fun getFlowers(): List<String> {
 //            println(row.getCell(20)?.stringCellValue)
 //        }
 
-        sheet.asSequence().drop(1).mapNotNull { it.getCell(20)?.stringCellValue }.distinct().toList()
+        sheet.asSequence().drop(1).mapNotNull { it.getCell(20)?.stringCellValue }.distinct().filter {
+            val file = File("images/$it")
+
+            !file.exists() || file.listFiles() == null || (file.listFiles() != null && file.listFiles().size < 30)
+        }.toList()
     }
 }
 
-fun downloadImages(folder: String, flowers: List<String>) {
+fun downloadImages(folderStr: String, flowers: List<String>) {
     val driver = ChromeDriver()
 
     val searchImgPer = 30
@@ -43,17 +47,18 @@ fun downloadImages(folder: String, flowers: List<String>) {
     flowers.forEach { keyword ->
         val current = System.currentTimeMillis()
 
-        if(completed > 0) {
+        if (completed > 0) {
             val averageTime = (current - start) / completed
             val remaining = flowers.size - completed
 
-            println("completed: ($completed/${flowers.size}) (${(completed.toDouble() / flowers.size * 100).roundToInt() }%) remaining time: ${(averageTime * remaining / 1000.0 / 60.0).roundToInt()} min.")
+            println("completed: ($completed/${flowers.size}) (${(completed.toDouble() / flowers.size * 100).roundToInt()}%) remaining time: ${(averageTime * remaining / 1000.0 / 60.0).roundToInt()} min.")
         }
 
-        driver.get(getGoogleImageSearchLink("$keyword 사진"))
-        sleep(100L)
+        driver.get(getGoogleImageSearchLink("$keyword 식물"))
 
-        val folder = File("$folder/$keyword")
+        sleep(500)
+
+        val folder = File("$folderStr/$keyword")
         folder.mkdirs()
 
         // 이미지 목록 div, img 목록
@@ -62,45 +67,48 @@ fun downloadImages(folder: String, flowers: List<String>) {
         var count = 0
 
         imgList.take(searchImgPer).forEach { imgElement ->
-            val data = imgElement.getAttribute("src")
+            try {
+                val data = imgElement.getAttribute("src")
 
-            val file = File(folder, "img$count.jpg")
+                val file = File(folder, "img$count.jpg")
 
-            if (!file.exists()) file.createNewFile();
+                if (!file.exists()) file.createNewFile();
 
 //            println("data: $data")
 
-            if (data != null) {
-                val split = data.split(",")
-                if (split.size >= 2) { // true일시 base64 인코딩
-                    val base64Image: String = split[1]
-                    val imageBytes = DatatypeConverter.parseBase64Binary(base64Image)
+                if (data != null) {
+                    val split = data.split(",")
+                    if (split.size >= 2) { // true일시 base64 인코딩
+                        val base64Image: String = split[1]
+                        val imageBytes = DatatypeConverter.parseBase64Binary(base64Image)
 
-                    val img = ImageIO.read(ByteArrayInputStream(imageBytes))
+                        val img = ImageIO.read(ByteArrayInputStream(imageBytes))
 
-                    file.outputStream().buffered().use {
-                        ImageIO.write(img, "png", it)
-                    }
+                        file.outputStream().buffered().use {
+                            ImageIO.write(img, "png", it)
+                        }
 
-                    img.flush()
-                } else {
+                        img.flush()
+                    } else {
 //                    println("downloading image.. $data")
-                    // 이미지 다운로드
-                    BufferedInputStream(URL(data).openStream()).use { input ->
-                        BufferedOutputStream(FileOutputStream(file)).use { output ->
-                            input.copyTo(output)
+                        // 이미지 다운로드
+                        BufferedInputStream(URL(data).openStream()).use { input ->
+                            BufferedOutputStream(FileOutputStream(file)).use { output ->
+                                input.copyTo(output)
+                            }
                         }
                     }
-                }
 
-                count++
-            } else {
-                println("data is null. skipping... $count")
+                    count++
+                } else {
+                    println("data is null. skipping... $count")
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                println("an error occured. keep downloading...")
             }
 
         }
-
-        sleep(100L)
         completed++
     }
 
