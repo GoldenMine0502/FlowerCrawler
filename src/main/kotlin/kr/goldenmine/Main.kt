@@ -20,6 +20,8 @@ fun main() {
     downloadImages("images", list)
 }
 
+
+
 fun getFlowers(): List<String> {
     return FileInputStream("flower.xls").use { input ->
         val wb = HSSFWorkbook(input)
