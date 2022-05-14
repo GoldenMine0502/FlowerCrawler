@@ -12,7 +12,7 @@ import javax.net.ssl.X509TrustManager
 import java.security.cert.CertificateException
 import javax.net.ssl.SSLSocketFactory
 
-class RetrofitFactory {
+object RetrofitFactory {
     //http://openapi.nature.go.kr/openapi/service/rest/PlantService
     private val loginInstance = createRetrofit("http://openapi.nature.go.kr/").create(FlowerService::class.java)
 

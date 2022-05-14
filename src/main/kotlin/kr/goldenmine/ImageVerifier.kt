@@ -1,11 +1,12 @@
 package kr.goldenmine
 
 import java.io.File
+import java.util.*
 import javax.imageio.ImageIO
 
 fun main() {
     val folder = File("images2/")
-    val allfiles = folder.listFiles().asSequence().flatMap { it.listFiles().toList() }.toList()
+    val allfiles = folder.listFiles()?.asSequence()?.flatMap { it.listFiles()?.toList() ?: Collections.emptyList() }?.toList() ?: Collections.emptyList()
 
     var count = 0
 
