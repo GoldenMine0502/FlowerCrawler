@@ -1,14 +1,17 @@
 package kr.goldenmine.imageverifier
 
+import kr.goldenmine.util.CipherUtil
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.*
 import javax.imageio.ImageIO
 
 
 class ImageVerifier(private val rootFolder: File, private val verifiers: List<IVerifier>) {
+    // 중복 제거를 위한 md5
+    val base64List = HashSet<String>()
+
     fun verifyAll() {
         val allfiles = rootFolder.listFiles()
             ?.asSequence()
@@ -20,18 +23,30 @@ class ImageVerifier(private val rootFolder: File, private val verifiers: List<IV
         var deletedCount = 0
 
         allfiles.forEach { file ->
+            val imageBase64 = CipherUtil.getBase64FromImage(file)
+//            val imageBase64 = CipherUtil.getMD5Checksum(file)
+//            println(md5)
+
             val failed = try {
                 val img = ImageIO.read(file)
 
-                val verifier = verifiers.firstOrNull { it.verify(file, img) }
+                if(!base64List.contains(imageBase64)) {
+                    base64List.add(imageBase64)
 
-                if (verifier != null) {
-                    println("failed ${verifier.name} ${file.path} $count")
+                    val verifier = verifiers.firstOrNull { it.verify(file, img) }
 
+                    if (verifier != null) {
+                        println("failed ${verifier.name} ${file.path} $count")
+
+
+                        true
+                    } else {
+                        false
+                    }
+                } else { // md5가 겹치는경우
+                    println("base64 doubled ${file.path} $count")
 
                     true
-                } else {
-                    false
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()

@@ -1,8 +1,10 @@
 package kr.goldenmine.siteinfo.google
 
-import kr.goldenmine.findElementsWhileNotEmpty
+import kr.goldenmine.util.findElementsWhileNotEmpty
+import kr.goldenmine.primitives.sites.getRandom
 import kr.goldenmine.siteinfo.ISkippableSiteInfo
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 
@@ -35,6 +37,16 @@ abstract class SiteInfoGoogle(override val skipSites: List<String>) : ISkippable
     override fun getSearchLink(keyword: String) = "https://www.google.com/search?q=${keyword}&source=lnms&tbm=isch"
 
     override fun doAfterGetLink(driver: WebDriver) {
-
+//        Thread.sleep(50)
+//        repeat(5) {
+//            scroll(driver, 150, 250)
+//            Thread.sleep(50)
+//        }
     }
+
+//    private fun scroll(driver: WebDriver, minimumPx: Int, maximumPx: Int) {
+//        val jsExecutor = driver as JavascriptExecutor
+//        jsExecutor.executeScript("window.scrollBy(0, ${getRandom(minimumPx, maximumPx)})")
+//    }
+
 }

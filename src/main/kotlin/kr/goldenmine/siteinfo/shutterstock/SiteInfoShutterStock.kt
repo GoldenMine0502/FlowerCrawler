@@ -1,6 +1,6 @@
 package kr.goldenmine.siteinfo.shutterstock
 
-import kr.goldenmine.findElementsWhileNotEmpty
+import kr.goldenmine.util.findElementsWhileNotEmpty
 import kr.goldenmine.siteinfo.FlowerInfo
 import kr.goldenmine.siteinfo.ISiteInfo
 import org.openqa.selenium.By

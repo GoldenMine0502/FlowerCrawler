@@ -1,8 +1,8 @@
 package kr.goldenmine.primitives.sites
 
-import kr.goldenmine.findElementsWhileNotEmpty
-import kr.goldenmine.getDefaultDimension
-import kr.goldenmine.setChromePath
+import kr.goldenmine.util.findElementsWhileNotEmpty
+import kr.goldenmine.util.getDefaultDimension
+import kr.goldenmine.util.setChromePath
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement

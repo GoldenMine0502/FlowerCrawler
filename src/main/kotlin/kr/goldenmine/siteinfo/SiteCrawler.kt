@@ -22,11 +22,11 @@ class SiteCrawler(
 
     var imageCountPerKeyword: Int = -1,
 
-    val skipKeywordIfAlreadyDownloaded: Boolean = false
-) {
-    val driver: WebDriver = ChromeDriver()
+    val skipKeywordIfAlreadyDownloaded: Boolean = false,
 
     var sleepAfterGetLink: Long = 2000
+) {
+    val driver: WebDriver = ChromeDriver()
 
 
     // 처음 한번은 chromedriver.exe의 위치를 지정해야함
@@ -41,6 +41,10 @@ class SiteCrawler(
         val defaultDimension = Dimension((1920 * 1.2).toInt(), (1080 * 1.2).toInt())
 
         driver.manage().window().size = defaultDimension
+
+        Runtime.getRuntime().addShutdownHook(Thread {
+            driver.quit()
+        })
     }
 
     // 쓰레드 관련 관리를 편하게 하기 위함
@@ -57,7 +61,7 @@ class SiteCrawler(
             val keyword = siteInfo.getSearchKeyword(flowerInfo)
 
             // 이미 다운로드된 키워드 스킵
-            if(!(skipKeywordIfAlreadyDownloaded && alreadyDownloadedKeywords.contains(keyword))) {
+            if (!(skipKeywordIfAlreadyDownloaded && alreadyDownloadedKeywords.contains(keyword))) {
                 val link = siteInfo.getSearchLink(keyword)
 
                 // 폴더 만들기, 결과적으로 폴더는 항상 한국어로
@@ -81,7 +85,6 @@ class SiteCrawler(
                         val imgElement = imgElements[i]
                         val data = imgElement.getAttribute("src")
 
-
                         // 이미지 얻기
                         val img = getImageFromSrcData(data)
 
@@ -102,12 +105,12 @@ class SiteCrawler(
                     }
                 }
 
-                if(skipKeywordIfAlreadyDownloaded)
+                if (skipKeywordIfAlreadyDownloaded)
                     alreadyDownloadedKeywords.add(keyword)
             }
             count++
 
-            if(count % 10 == 0) {
+            if (count % 10 == 0) {
                 val time = System.currentTimeMillis() - start
                 val estimatedTime = time.toDouble() / count * list.size
 
@@ -116,18 +119,26 @@ class SiteCrawler(
         }
     }
 
-    fun getImageFromSrcData(data: String): BufferedImage {
-        val split = data.split(",")
+    fun getImageFromSrcData(data: String?): BufferedImage {
+        if (data != null) {
+            val split = data.split(",")
 
-        return if (split.size >= 2) { // true일시 base64 인코딩
-            val base64Image: String = split[1]
-            val imageBytes = DatatypeConverter.parseBase64Binary(base64Image)
+            if (split.size >= 2) { // true일시 base64 인코딩
+                val base64Image: String = split[1]
+                val imageBytes = DatatypeConverter.parseBase64Binary(base64Image)
 
-            ImageIO.read(ByteArrayInputStream(imageBytes))
-        } else {
-            BufferedInputStream(URL(data).openStream()).use { input ->
-                ImageIO.read(input)
+                val input = ByteArrayInputStream(imageBytes)
+
+                val image = ImageIO.read(input)
+
+                input.close()
+
+                return image
             }
+        }
+
+        return BufferedInputStream(URL(data).openStream()).use { input ->
+            ImageIO.read(input)
         }
     }
 }

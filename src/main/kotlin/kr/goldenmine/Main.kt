@@ -8,6 +8,7 @@ import kr.goldenmine.siteinfo.naver.SiteInfoNaver
 import kr.goldenmine.siteinfo.shutterstock.SiteInfoShutterStock
 import kr.goldenmine.util.loadFlowersFromExcel
 import java.io.File
+import java.lang.Thread.sleep
 
 fun main() {
     val excepts = ArrayList<String>()
@@ -70,27 +71,46 @@ fun main() {
 
     folder.mkdirs()
 
-    val crawlers = listOf(
-        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 30, true),
-        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 30, true),
-        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 30, true),
-        SiteCrawler(folder, SiteInfoShutterStock(), flowers, 30),
-    )
+//    val crawlers = listOf(
+//        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 50, true, 3000),
+//        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 50, true, 3000),
+//        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 50, true, 5000),
+//        SiteCrawler(folder, SiteInfoShutterStock(), flowers, 50, true),
+//    )
 
-    crawlers.map {
-        Runtime.getRuntime().addShutdownHook(Thread() {
-            it.driver.quit()
-        })
-        val thread = Thread {
-            it.downloadAll()
-        }
-
-        thread.start()
-
-        thread
-    }.forEach {
-        it.join() // 모든 작업이 끝날 때 까지 기다리기, 그리고 베리파이어 실행
+    val thread1 = Thread {
+        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 50, true, 1000).downloadAll()
     }
+
+    val thread2 = Thread {
+        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 50, true, 1000).downloadAll()
+    }
+
+    val thread3 = Thread {
+        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 50, true, 5000).downloadAll()
+    }
+
+    val thread4 = Thread {
+        SiteCrawler(folder, SiteInfoShutterStock(), flowers, 50, true).downloadAll()
+    }
+
+    thread1.start()
+    sleep(1000)
+
+    thread3.start()
+    sleep(1000)
+
+    thread4.start()
+    sleep(1000)
+
+    thread1.join()
+
+    thread2.start()
+    sleep(1000)
+
+    thread2.join()
+    thread3.join()
+    thread4.join()
 
     val verifiers = listOf(
         VerifierImageGrayScaled(),

@@ -1,6 +1,6 @@
 package kr.goldenmine.siteinfo.naver
 
-import kr.goldenmine.findElementsWhileNotEmpty
+import kr.goldenmine.util.findElementsWhileNotEmpty
 import kr.goldenmine.siteinfo.FlowerInfo
 import kr.goldenmine.siteinfo.ISkippableSiteInfo
 import kr.goldenmine.primitives.sites.getRandom
@@ -8,7 +8,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import java.util.*
 
 class SiteInfoNaver(override val skipSites: List<String>) : ISkippableSiteInfo {
     override fun hasSkippableLinks(divElement: WebElement): Boolean {

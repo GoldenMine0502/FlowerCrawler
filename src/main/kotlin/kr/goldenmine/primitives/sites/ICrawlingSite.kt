@@ -1,6 +1,6 @@
 package kr.goldenmine.primitives.sites
 
-import kr.goldenmine.downloadFromImgSrc
+import kr.goldenmine.util.downloadFromImgSrc
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import java.io.File

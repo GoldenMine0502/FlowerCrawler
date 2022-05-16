@@ -1,4 +1,4 @@
-package kr.goldenmine
+package kr.goldenmine.util
 
 import org.openqa.selenium.*
 import java.io.*
@@ -16,6 +16,8 @@ fun getDefaultDimension() = Dimension((1920 * 1.2).toInt(), (1080 * 1.2).toInt()
 
 fun SearchContext.findElementsWhileNotEmpty(by: By, sleep: Long = 1000, timeout: Long = 2500): List<WebElement> {
     var result: List<WebElement>?
+
+    sleep(sleep)
 
     var start = System.currentTimeMillis()
 
