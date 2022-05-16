@@ -20,8 +20,8 @@ class SiteInfoShutterStock: ISiteInfo {
             .findElementsWhileNotEmpty(By.tagName("img"))
             .asSequence()
             .filter { "shutterstock" != it.getAttribute("alt") }
-            .drop(2)
             .toList()
+            .drop(4)
     }
 
     override fun getSearchLink(keyword: String) = "https://www.shutterstock.com/ko/search/$keyword"

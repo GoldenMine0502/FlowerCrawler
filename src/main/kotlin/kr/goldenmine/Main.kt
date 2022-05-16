@@ -1,5 +1,6 @@
 package kr.goldenmine
 
+import kr.goldenmine.imageverifier.*
 import kr.goldenmine.siteinfo.SiteCrawler
 import kr.goldenmine.siteinfo.google.SiteInfoGoogleEng
 import kr.goldenmine.siteinfo.google.SiteInfoGoogleKor
@@ -62,24 +63,42 @@ fun main() {
 
 
     val flowers = loadFlowersFromExcel()
+
+    println("${flowers.size} flowers will be downloaded.")
+
     val folder = File("images4/")
 
     folder.mkdirs()
 
     val crawlers = listOf(
-        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 25),
-//        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 25),
-//        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 25),
-//        SiteCrawler(folder, SiteInfoShutterStock(), flowers, 25),
+        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 30, true),
+        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 30, true),
+        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 30, true),
+        SiteCrawler(folder, SiteInfoShutterStock(), flowers, 30),
     )
 
-    crawlers.forEach {
-//        Runtime.getRuntime().addShutdownHook(Thread() {
-//            it.driver.quit()
-//        })
-        Thread {
-
+    crawlers.map {
+        Runtime.getRuntime().addShutdownHook(Thread() {
+            it.driver.quit()
+        })
+        val thread = Thread {
             it.downloadAll()
-        }.start()
+        }
+
+        thread.start()
+
+        thread
+    }.forEach {
+        it.join() // 모든 작업이 끝날 때 까지 기다리기, 그리고 베리파이어 실행
     }
+
+    val verifiers = listOf(
+        VerifierImageGrayScaled(),
+        VerifierImageRatio(),
+        VerifierImageSmall()
+    )
+
+    val imageVerifier = ImageVerifier(folder, verifiers)
+
+    imageVerifier.verifyAll()
 }

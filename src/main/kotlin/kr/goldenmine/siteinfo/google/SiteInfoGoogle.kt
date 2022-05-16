@@ -12,11 +12,14 @@ abstract class SiteInfoGoogle(override val skipSites: List<String>) : ISkippable
 //        val tagText = divElement.findElement(By.className("fxgdke")).text
         // VFACy kGQAp sMi44c lNHeqe WGvvNb
         // VFACy를 포함하는 모든 태그는 위 4개 태그를 추가로 다 갖고 있었다.
-        val tagText = divElement.findElement(By.className("VFACy")).text
+        val tagText = divElement.text
 
-        return skipSites.any { text ->
-            return tagText.contains(text) || text.contains(tagText)
-        }
+//        println("===========")
+//        println(tagText)
+////        println(skipSites)
+//        println(skipSites.any { text -> tagText.contains(text) })
+
+        return tagText.isNotEmpty() && skipSites.any { text -> tagText.contains(text) /*|| text.contains(tagText)*/ }
     }
 
     override fun getImgElements(driver: WebDriver): List<WebElement> {

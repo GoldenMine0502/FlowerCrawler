@@ -11,6 +11,7 @@ import java.lang.Thread.sleep
 import java.net.URL
 import javax.imageio.ImageIO
 import javax.xml.bind.DatatypeConverter
+import kotlin.math.roundToInt
 
 class SiteCrawler(
     private val rootFolder: File,
@@ -19,11 +20,13 @@ class SiteCrawler(
 
     private val list: List<FlowerInfo>,
 
-    var imageCountPerKeyword: Int = -1
+    var imageCountPerKeyword: Int = -1,
+
+    val skipKeywordIfAlreadyDownloaded: Boolean = false
 ) {
     val driver: WebDriver = ChromeDriver()
 
-    var sleepAfterGetLink: Long = 1000
+    var sleepAfterGetLink: Long = 2000
 
 
     // 처음 한번은 chromedriver.exe의 위치를 지정해야함
@@ -43,52 +46,72 @@ class SiteCrawler(
     // 쓰레드 관련 관리를 편하게 하기 위함
     fun downloadAll() {
         var failCount = 0
+        var count = 0
+
+        val start = System.currentTimeMillis()
+
+        val alreadyDownloadedKeywords = HashSet<String>()
 
         list.forEach { flowerInfo ->
             // 키워드에 대한 링크 얻기
             val keyword = siteInfo.getSearchKeyword(flowerInfo)
-            val link = siteInfo.getSearchLink(keyword)
 
-            // 폴더 만들기, 결과적으로 폴더는 항상 한국어로
-            val folder = File(rootFolder, "/${flowerInfo.korean}")
-            folder.mkdirs()
+            // 이미 다운로드된 키워드 스킵
+            if(!(skipKeywordIfAlreadyDownloaded && alreadyDownloadedKeywords.contains(keyword))) {
+                val link = siteInfo.getSearchLink(keyword)
 
-            // 해당 링크로 접속
-            driver.get(link)
-            siteInfo.doAfterGetLink(driver)
+                // 폴더 만들기, 결과적으로 폴더는 항상 한국어로
+                val folder = File(rootFolder, "/${flowerInfo.korean}")
+                folder.mkdirs()
 
-            sleep(sleepAfterGetLink)
+                // 해당 링크로 접속
+                driver.get(link)
+                siteInfo.doAfterGetLink(driver)
 
-            // 가능한 이미지 엘리먼트 얻기
-            val imgElements = siteInfo.getImgElements(driver)
+                sleep(sleepAfterGetLink)
 
-            for (i in imgElements.indices) {
-                try {
-                    // 일정 갯수 이상 다운로드시 break
-                    if (imageCountPerKeyword >= 0 && i >= imageCountPerKeyword) break
+                // 가능한 이미지 엘리먼트 얻기
+                val imgElements = siteInfo.getImgElements(driver)
 
-                    val imgElement = imgElements[i]
-                    val data = imgElement.getAttribute("src")
+                for (i in imgElements.indices) {
+                    try {
+                        // 일정 갯수 이상 다운로드시 break
+                        if (imageCountPerKeyword >= 0 && i >= imageCountPerKeyword) break
 
-                    // 파일 생성
-                    val file = File(folder, "/${siteInfo.name}_${keyword}_$i.jpg")
-                    if (!file.exists()) file.createNewFile()
+                        val imgElement = imgElements[i]
+                        val data = imgElement.getAttribute("src")
 
-                    // 이미지 얻기
-                    val img = getImageFromSrcData(data)
 
-                    // 이미지 저장하기
-                    file.outputStream().buffered().use {
-                        ImageIO.write(img, "jpg", it)
+                        // 이미지 얻기
+                        val img = getImageFromSrcData(data)
+
+                        // 파일 생성
+                        val file = File(folder, "/${siteInfo.name}_${keyword}_$i.jpg")
+                        if (!file.exists()) file.createNewFile()
+
+                        // 이미지 저장하기
+                        file.outputStream().buffered().use {
+                            ImageIO.write(img, "jpg", it)
+                        }
+                    } catch (ex: Exception) {
+//                        ex.printStackTrace()
+
+                        failCount++
+
+                        println("failed to download $i of ($flowerInfo) from ${siteInfo.name} fail count: $failCount")
                     }
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-
-                    failCount++
-
-                    println("failed to download $i of ($flowerInfo) from ${siteInfo.name} fail count: $failCount")
-
                 }
+
+                if(skipKeywordIfAlreadyDownloaded)
+                    alreadyDownloadedKeywords.add(keyword)
+            }
+            count++
+
+            if(count % 10 == 0) {
+                val time = System.currentTimeMillis() - start
+                val estimatedTime = time.toDouble() / count * list.size
+
+                println("images of index $count are downloaded from ${siteInfo.name} ($count / ${list.size}). remaining time: ${((estimatedTime - time) / 60000).roundToInt()} min.")
             }
         }
     }
