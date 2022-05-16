@@ -86,7 +86,7 @@ class SiteCrawler(
 
                     failCount++
 
-                    println("failed to download $i of $flowerInfo from ${siteInfo.name} fail count: $failCount")
+                    println("failed to download $i of ($flowerInfo) from ${siteInfo.name} fail count: $failCount")
 
                 }
             }
