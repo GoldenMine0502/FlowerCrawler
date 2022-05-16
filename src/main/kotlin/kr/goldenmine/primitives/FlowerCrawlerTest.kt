@@ -1,5 +1,6 @@
 package kr.goldenmine
 
+import kr.goldenmine.primitives.FlowerCrawler
 import kr.goldenmine.siteinfo.FlowerInfo
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.FileInputStream

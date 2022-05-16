@@ -1,4 +1,4 @@
-package kr.goldenmine
+package kr.goldenmine.primitives
 
 import kr.goldenmine.siteinfo.FlowerInfo
 import kr.goldenmine.primitives.sites.CrawlerGoogle
