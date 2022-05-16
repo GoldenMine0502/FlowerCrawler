@@ -25,13 +25,13 @@ fun main() {
             if (img.width < 80 || img.height < 80) {
                 println("size too small: ${it.path} $count")
                 deletedCount++
-//                it.delete()
+                it.delete()
             }
 
             if (max(img.width.toDouble() / img.height, img.height.toDouble() / img.width) > 3.5) {
                 println("ratio not valid ${it.path} $count")
                 deletedCount++
-//                it.delete()
+                it.delete()
             }
 
             // 그레이 비율이 95%이상
@@ -39,13 +39,13 @@ fun main() {
             if(grayRatio > 0.99) {
                 println("gray image ${it.path} $count $grayRatio ${(deletedCount.toDouble() / count * 1000).roundToInt() / 10.0}%")
                 deletedCount++
-//                it.delete()
+                it.delete()
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
             println("exception ${it.path} $count")
             deletedCount++
-//            it.delete()
+            it.delete()
         }
 
         count++

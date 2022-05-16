@@ -32,9 +32,9 @@ fun SearchContext.findElementsWhileNotEmpty(by: By, sleep: Long = 1000, timeout:
     return result!!
 }
 
-fun downloadFromImgSrc(element: WebElement, file: File, skips: List<String>): Boolean {
+fun downloadFromImgSrc(imgElement: WebElement, file: File, skips: List<String>): Boolean {
     try {
-        val data = element.getAttribute("src")
+        val data = imgElement.getAttribute("src")
 
         if(skips.any { it.contains(data) }) return false
 
