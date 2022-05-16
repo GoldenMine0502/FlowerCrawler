@@ -34,6 +34,8 @@ fun getFlowers2(): List<String> {
             .filter { it.isNotEmpty() }
             .map { it.substring(0, it.length - 1) }
             .distinct()
+            .filter { it.isNotEmpty() }
+            .filter { (File("images2/$it").listFiles()?.size ?: 0) < 95 }
             .toList()
     }
 }
