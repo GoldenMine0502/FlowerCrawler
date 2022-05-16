@@ -1,13 +1,14 @@
 package kr.goldenmine
 
-import kr.goldenmine.sites.CrawlerGoogle
-import kr.goldenmine.sites.CrawlerNaver
-import kr.goldenmine.sites.CrawlerShutterStock
-import kr.goldenmine.sites.ICrawlingSite
+import kr.goldenmine.siteinfo.FlowerInfo
+import kr.goldenmine.primitives.sites.CrawlerGoogle
+import kr.goldenmine.primitives.sites.CrawlerNaver
+import kr.goldenmine.primitives.sites.CrawlerShutterStock
+import kr.goldenmine.primitives.sites.ICrawlingSite
 import java.io.*
 
 class FlowerCrawler(
-    private val keywords: List<FlowerEngInfo>,
+    private val keywords: List<FlowerInfo>,
     )
 {
 

@@ -1,7 +1,6 @@
-package kr.goldenmine
+package kr.goldenmine.primitives
 
 import com.google.gson.Gson
-import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.File
 
 fun main() {

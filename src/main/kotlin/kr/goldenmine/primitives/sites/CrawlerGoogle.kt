@@ -1,4 +1,4 @@
-package kr.goldenmine.sites
+package kr.goldenmine.primitives.sites
 
 import kr.goldenmine.findElementsWhileNotEmpty
 import kr.goldenmine.getDefaultDimension
@@ -33,6 +33,7 @@ class CrawlerGoogle(
     override fun getDriver(): WebDriver = driver
 
     override fun getSearchLink(keyword: String) = "https://www.google.com/search?q=${keyword}&source=lnms&tbm=isch"
+
     override fun getImgElements(): List<WebElement> {
         return driver
             .findElementsWhileNotEmpty(By.className("Q4LuWd"))

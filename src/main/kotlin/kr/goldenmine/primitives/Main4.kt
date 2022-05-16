@@ -1,8 +1,8 @@
-package kr.goldenmine
+package kr.goldenmine.primitives
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kr.goldenmine.network.RetrofitFactory
+import kr.goldenmine.api.FlowerApiInfo
+import kr.goldenmine.api.network.RetrofitFactory
 import org.jsoup.Jsoup
 import java.io.File
 
@@ -13,7 +13,7 @@ fun main() {
     val gson = Gson()
 //    val type = object : TypeToken<HashMap<String, Int>>() {}.type
 
-    val list = ArrayList<FlowerInfo>()
+    val list = ArrayList<FlowerApiInfo>()
 
     if(idFile.exists()) {
         println(idFile.readText())
@@ -40,7 +40,7 @@ fun main() {
     }
 }
 
-fun requestSpec(id: Int): FlowerInfo {
+fun requestSpec(id: Int): FlowerApiInfo {
     val result = RetrofitFactory.getFlowerInstance().findSpec(serviceKey, id).execute().body()!!
 
     val html = Jsoup.parse(result)
@@ -70,7 +70,7 @@ fun requestSpec(id: Int): FlowerInfo {
     String imgURL; // 이미지 URL imgUrl
      */
 
-    val flowerInfo = FlowerInfo()
+    val flowerInfo = FlowerApiInfo()
     flowerInfo.text = html.getElementsByTag("item")[0].text()
     flowerInfo.plantId = id
     flowerInfo.spot = html.getElementsByTag("dstrb")[0].text()

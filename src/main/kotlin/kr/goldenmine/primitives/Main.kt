@@ -1,3 +1,5 @@
+package kr.goldenmine.primitives
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.openqa.selenium.By
 import org.openqa.selenium.Dimension

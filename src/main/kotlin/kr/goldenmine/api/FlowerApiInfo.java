@@ -1,8 +1,6 @@
-package kr.goldenmine;
+package kr.goldenmine.api;
 
-import org.jetbrains.annotations.NotNull;
-
-public class FlowerInfo {
+public class FlowerApiInfo {
     public int plantId; // plantPilbkNo
     public String spot; // 주요 분포지역 dstrb
     public String family; // 과 familyKorNm

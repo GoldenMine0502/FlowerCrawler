@@ -1,4 +1,4 @@
-package kr.goldenmine.network
+package kr.goldenmine.api.network
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

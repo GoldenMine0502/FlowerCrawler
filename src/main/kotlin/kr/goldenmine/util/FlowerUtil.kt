@@ -1,10 +1,11 @@
-package kr.goldenmine
+package kr.goldenmine.util
 
+import kr.goldenmine.siteinfo.FlowerInfo
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import java.io.FileInputStream
 
-fun main() {
-    val flowers = ArrayList<FlowerEngInfo>()
+fun loadFlowersFromExcel(): List<FlowerInfo> {
+    val flowers = ArrayList<FlowerInfo>()
 //    val eng22Map = HashMap<String, String>()
 //    val eng16Map = HashMap<String, String>()
     FileInputStream("flower.xls").use { input ->
@@ -43,9 +44,10 @@ fun main() {
                 val eng22 = row.getCell(22)?.stringCellValue
                 val eng16 = row.getCell(16)?.stringCellValue
 
-                val flower = FlowerEngInfo(recentKor, eng22, eng16)
 
                 if(recentKor != null && eng22 != null && eng16 != null) {
+                    val flower = FlowerInfo(recentKor!!, eng22, eng16)
+
                     if(flowers.firstOrNull { eng16 == it.eng16 } == null) {
                         flowers.add(flower)
                     }
@@ -53,13 +55,5 @@ fun main() {
             }
     }
 
-//    val flowers2 = flowers.distinct()
-//    flowers.clear()
-//    flowers.addAll(flowers2)
-
-    println(flowers)
-    println(flowers.size)
-
-    val crawler = FlowerCrawler(flowers)
-    crawler.downloadFromAll()
+    return flowers
 }

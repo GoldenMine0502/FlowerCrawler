@@ -1,7 +1,7 @@
-package kr.goldenmine
+package kr.goldenmine.primitives
 
 import com.google.gson.reflect.TypeToken
-import kr.goldenmine.network.RetrofitFactory
+import kr.goldenmine.api.network.RetrofitFactory
 import org.jsoup.Jsoup
 import java.io.File
 import java.lang.Thread.sleep

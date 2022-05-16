@@ -1,4 +1,4 @@
-package kr.goldenmine.sites
+package kr.goldenmine.primitives.sites
 
 import kr.goldenmine.findElementsWhileNotEmpty
 import kr.goldenmine.getDefaultDimension
@@ -31,7 +31,7 @@ class CrawlerNaver(
         })
     }
 
-    override fun useKeyword(kor: String, eng22: String?, eng16: String?): String = "$kor"
+    override fun useKeyword(kor: String, eng22: String?, eng16: String?): String = "$kor 식물"
 
     override fun getDriver(): WebDriver = driver
 

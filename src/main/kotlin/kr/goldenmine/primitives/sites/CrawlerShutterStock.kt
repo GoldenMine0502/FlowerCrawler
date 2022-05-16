@@ -1,4 +1,4 @@
-package kr.goldenmine.sites
+package kr.goldenmine.primitives.sites
 
 import kr.goldenmine.findElementsWhileNotEmpty
 import kr.goldenmine.getDefaultDimension

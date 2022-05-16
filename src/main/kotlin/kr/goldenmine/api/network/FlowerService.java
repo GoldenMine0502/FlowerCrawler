@@ -1,4 +1,4 @@
-package kr.goldenmine.network;
+package kr.goldenmine.api.network;
 
 //import dleornjs.login.models.Account;
 //import dleornjs.login.models.Question;

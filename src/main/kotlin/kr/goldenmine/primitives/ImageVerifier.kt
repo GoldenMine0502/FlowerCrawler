@@ -1,10 +1,9 @@
-package kr.goldenmine
+package kr.goldenmine.primitives
 
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.lang.Double.max
-import java.nio.Buffer
 import java.util.*
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
