@@ -20,14 +20,13 @@ class SiteInfoNaver(override val skipSites: List<String>) : ISkippableSiteInfo {
     }
 
     override val name: String
-        get() = "naver"
+        get() = "naver_kor"
 
     override fun getSearchKeyword(flowerInfo: FlowerInfo): String = flowerInfo.korean
 
     override fun getSearchLink(keyword: String) = "https://search.naver.com/search.naver?where=image&query=$keyword"
 
     override fun getImgElements(driver: WebDriver): List<WebElement> {
-
         return driver
             .findElementsWhileNotEmpty(By.className("photo_tile"))[0]
             .findElements(By.className("tile_item"))

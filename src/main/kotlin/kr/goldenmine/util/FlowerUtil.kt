@@ -45,7 +45,7 @@ fun loadFlowersFromExcel(): List<FlowerInfo> {
                 val eng16 = row.getCell(16)?.stringCellValue
 
 
-                if(recentKor != null && eng22 != null && eng16 != null) {
+                if(recentKor != null && eng22 != null && eng16 != null && recentKor!!.isNotEmpty() && eng22.isNotEmpty() && eng16.isNotEmpty()) {
                     val flower = FlowerInfo(recentKor!!, eng22, eng16)
 
                     if(flowers.firstOrNull { eng16 == it.eng16 } == null) {

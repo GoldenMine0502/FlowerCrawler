@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement
 
 class SiteInfoShutterStock: ISiteInfo {
     override val name: String
-        get() = "shutterstock"
+        get() = "shutterstock_eng"
 
     override fun getSearchKeyword(flowerInfo: FlowerInfo): String = flowerInfo.eng16
 

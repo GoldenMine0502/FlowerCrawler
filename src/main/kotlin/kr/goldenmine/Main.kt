@@ -16,6 +16,7 @@ fun main() {
     excepts.add("sciencedirect.com")
     excepts.add("academic.edu")
     excepts.add("peerj.com")
+    excepts.add("nature.com")
 
     // 썸네일이 별로 썩 좋지 못함
     excepts.add("youtube.com")
@@ -54,7 +55,6 @@ fun main() {
     excepts.add("wisdom.prkorea.com")
     excepts.add("extension.uga.edu")
     excepts.add("freshkorean.com")
-    excepts.add("extension.uga.edu")
     excepts.add("wordrow.kr")
     excepts.add("wikiwand.com")
     excepts.add("studylib.net")
