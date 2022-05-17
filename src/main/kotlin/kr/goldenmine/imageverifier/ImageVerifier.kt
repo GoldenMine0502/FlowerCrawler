@@ -1,6 +1,7 @@
 package kr.goldenmine.imageverifier
 
 import kr.goldenmine.util.CipherUtil
+import kr.goldenmine.util.moveFile
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -68,15 +69,5 @@ class ImageVerifier(private val rootFolder: File, private val verifiers: List<IV
         println("$deletedCount")
     }
 
-    fun moveFile(src: File, dst: File) {
-        try {
-            dst.parentFile.mkdirs()
 
-            val filePath = src.toPath()
-            val filePathToMove = dst.toPath()
-            Files.move(filePath, filePathToMove)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
 }

@@ -3,6 +3,7 @@ package kr.goldenmine
 import kr.goldenmine.imageverifier.*
 import kr.goldenmine.siteinfo.SiteCrawler
 import kr.goldenmine.siteinfo.google.SiteInfoGoogleEng
+import kr.goldenmine.siteinfo.google.SiteInfoGoogleEngSpec
 import kr.goldenmine.siteinfo.google.SiteInfoGoogleKor
 import kr.goldenmine.siteinfo.naver.SiteInfoNaver
 import kr.goldenmine.siteinfo.shutterstock.SiteInfoShutterStock
@@ -94,6 +95,10 @@ fun main() {
         SiteCrawler(folder, SiteInfoShutterStock(), flowers, 50, true).downloadAll()
     }
 
+    val thread5 = Thread {
+        SiteCrawler(folder, SiteInfoGoogleEngSpec(excepts), flowers, 50, true).downloadAll()
+    }
+
     thread1.start()
     sleep(1000)
 
@@ -109,8 +114,13 @@ fun main() {
     sleep(1000)
 
     thread2.join()
+
+    thread5.start()
+    sleep(1000)
+
     thread3.join()
     thread4.join()
+    thread5.join()
 
     val verifiers = listOf(
         VerifierImageGrayScaled(),
