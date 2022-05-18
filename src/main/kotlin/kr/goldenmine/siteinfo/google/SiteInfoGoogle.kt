@@ -31,7 +31,10 @@ abstract class SiteInfoGoogle(override val skipSites: List<String>) : ISkippable
         return driver
             .findElementsWhileNotEmpty(By.className("MSM1fd"))
             .filter { !hasSkippableLinks(it) }
-            .map { it.findElement(By.className("Q4LuWd")) }
+            .map {
+                it.findElement(By.className("Q4LuWd"))
+//                it.findElement(By.tagName("img"))
+            }
     }
 
     override fun getSearchLink(keyword: String) = "https://www.google.com/search?q=${keyword}&source=lnms&tbm=isch"

@@ -21,7 +21,7 @@ class SiteInfoNaver(override val skipSites: List<String>) : ISkippableSiteInfo {
     override val name: String
         get() = "naver_kor"
 
-    override fun getSearchKeyword(flowerInfo: FlowerInfo): String = flowerInfo.korean
+    override fun getSearchKeyword(flowerInfo: FlowerInfo): String = "${flowerInfo.korean} 식물"
 
     override fun getSearchLink(keyword: String) = "https://search.naver.com/search.naver?where=image&query=$keyword"
 
@@ -36,10 +36,12 @@ class SiteInfoNaver(override val skipSites: List<String>) : ISkippableSiteInfo {
 
     override fun doAfterGetLink(driver: WebDriver) {
         Thread.sleep(100)
-        repeat(5) {
+        repeat(8) {
             scroll(driver, 150, 250)
             Thread.sleep(50)
         }
+
+        Thread.sleep(1000)
     }
 
     private fun scroll(driver: WebDriver, minimumPx: Int, maximumPx: Int) {

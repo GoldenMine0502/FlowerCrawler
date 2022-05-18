@@ -65,10 +65,12 @@ fun main() {
 
 
     val flowers = loadFlowersFromExcel()
+    val koreans = flowers.map { it.korean }.distinct().size
 
     println("${flowers.size} flowers will be downloaded.")
+    println("$koreans sizes")
 
-    val folder = File("images4/")
+    val folder = File("images6/")
 
     folder.mkdirs()
 
@@ -80,15 +82,15 @@ fun main() {
 //    )
 
     val thread1 = Thread {
-        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 50, true, 1000).downloadAll()
+        SiteCrawler(folder, SiteInfoGoogleEng(excepts), flowers, 50, true, 200).downloadAll()
     }
 
     val thread2 = Thread {
-        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 50, true, 1000).downloadAll()
+        SiteCrawler(folder, SiteInfoGoogleKor(excepts), flowers, 50, true, 200).downloadAll()
     }
 
     val thread3 = Thread {
-        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 50, true, 5000).downloadAll()
+        SiteCrawler(folder, SiteInfoNaver(excepts), flowers, 50, true, 2000).downloadAll()
     }
 
     val thread4 = Thread {
@@ -96,7 +98,7 @@ fun main() {
     }
 
     val thread5 = Thread {
-        SiteCrawler(folder, SiteInfoGoogleEngSpec(excepts), flowers, 50, true).downloadAll()
+        SiteCrawler(folder, SiteInfoGoogleEngSpec(excepts), flowers, 50, true, 200).downloadAll()
     }
 
     thread1.start()
@@ -118,7 +120,7 @@ fun main() {
     thread5.start()
     sleep(1000)
 
-    thread3.join()
+//    thread3.join()
     thread4.join()
     thread5.join()
 

@@ -24,7 +24,7 @@ class SiteInfoShutterStock: ISiteInfo {
             .drop(4)
     }
 
-    override fun getSearchLink(keyword: String) = "https://www.shutterstock.com/ko/search/$keyword"
+    override fun getSearchLink(keyword: String) = "https://www.shutterstock.com/ko/search/$keyword?category=Nature"
 
     override fun doAfterGetLink(driver: WebDriver) {
 

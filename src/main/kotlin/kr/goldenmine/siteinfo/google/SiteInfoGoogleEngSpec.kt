@@ -6,5 +6,5 @@ class SiteInfoGoogleEngSpec(override val skipSites: List<String>) : SiteInfoGoog
     override val name: String
         get() = "google_eng_s"
 
-    override fun getSearchKeyword(flowerInfo: FlowerInfo): String = "${flowerInfo.eng16}"
+    override fun getSearchKeyword(flowerInfo: FlowerInfo): String = "${flowerInfo.eng19} plant"
 }

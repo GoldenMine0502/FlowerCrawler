@@ -43,10 +43,11 @@ fun main() {
                 // 22 = 추천영문명
                 val eng22 = row.getCell(22)?.stringCellValue
                 val eng16 = row.getCell(16)?.stringCellValue
+                val eng19 = row.getCell(16)?.stringCellValue
 
 
-                if(recentKor != null && eng22 != null && eng16 != null) {
-                    val flower = FlowerInfo(recentKor!!, eng22, eng16)
+                if(recentKor != null && eng22 != null && eng16 != null && eng19 != null) {
+                    val flower = FlowerInfo(recentKor!!, eng16, eng19, eng22)
                     if(flowers.firstOrNull { eng16 == it.eng16 } == null) {
                         flowers.add(flower)
                     }

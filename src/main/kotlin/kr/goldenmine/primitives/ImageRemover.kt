@@ -13,9 +13,11 @@ fun main() {
         ?.toList() ?: Collections.emptyList()
 
     allfiles.forEach { file ->
-        if(file.name.contains("shutterstock")) {
+        if(file.name.contains("shutterstock") || file.name.contains("google_eng_s")) {
             val dst = File("deleted/${file.parentFile.name}/${file.name}")
             moveFile(file, dst)
+
+            println("moved ${file.name}")
         }
     }
 }

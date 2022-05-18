@@ -41,14 +41,16 @@ fun loadFlowersFromExcel(): List<FlowerInfo> {
 
                 // 16 = 속명
                 // 22 = 추천영문명
+                // 19 = 학명
                 val eng22 = row.getCell(22)?.stringCellValue
+                val eng19 = row.getCell(19)?.stringCellValue
                 val eng16 = row.getCell(16)?.stringCellValue
 
 
-                if(recentKor != null && eng22 != null && eng16 != null && recentKor!!.isNotEmpty() && eng22.isNotEmpty() && eng16.isNotEmpty()) {
-                    val flower = FlowerInfo(recentKor!!, eng22, eng16)
+                if(recentKor != null && eng22 != null && eng16 != null && eng19 != null && recentKor!!.isNotEmpty()) {
+                    val flower = FlowerInfo(recentKor!!, eng16, eng19, eng22)
 
-                    if(flowers.firstOrNull { eng16 == it.eng16 } == null) {
+                    if(flowers.firstOrNull { eng16 == it.eng16 && recentKor == it.korean } == null) {
                         flowers.add(flower)
                     }
                 }
